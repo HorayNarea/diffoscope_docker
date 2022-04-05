@@ -27,6 +27,14 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 	git clone https://github.com/tpoechtrager/apple-libtapi.git /tmp/apple-libtapi && cd /tmp/apple-libtapi && ./build.sh && ./install.sh && cd / && rm -rf /tmp/apple-libtapi && \
 	git clone https://github.com/tpoechtrager/xar.git /tmp/xar && cd /tmp/xar/xar && ./configure && make -j $(nproc) && make install && cd / && rm -rf /tmp/xar && \
 	git clone https://github.com/tpoechtrager/cctools-port.git /tmp/cctools-port && cd /tmp/cctools-port/cctools && ./configure && make -j $(nproc) && make install && cd / && rm -rf /tmp/cctools-port && \
+		rm /usr/local/bin/ar && \
+		rm /usr/local/bin/as && \
+		rm /usr/local/bin/ld && \
+		rm /usr/local/bin/nm && \
+		rm /usr/local/bin/ranlib && \
+		rm /usr/local/bin/size && \
+		rm /usr/local/bin/strings && \
+		rm /usr/local/bin/strip && \
 #	curl -sSL https://github.com/coreboot/coreboot/archive/refs/tags/4.16.tar.gz | tar xzC /tmp && cd /tmp/coreboot-4.16/util && make -C cbfstool -j $(nproc) && make install -C cbfstool && cd / && rm -rf /tmp/coreboot-4.16 && \
 	apt-get remove --purge --yes \
 		build-essential \
