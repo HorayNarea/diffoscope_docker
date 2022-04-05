@@ -14,5 +14,15 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: HorayNarea
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build image
-        run: docker build -t horaynarea/diffoscope:latest .
+        run: docker build -t ghcr.io/horaynarea/diffoscope:latest .
+
+      - name: Push image
+        run: docker push ghcr.io/horaynarea/diffoscope:latest
