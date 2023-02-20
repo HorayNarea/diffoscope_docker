@@ -1,6 +1,9 @@
-FROM debian:sid
+FROM debian:bookworm-slim
 
 LABEL maintainer "Thomas Sänger <thomas@gecko.space>"
+
+ENV DIFFOSCOPE_VERSION=236
+ENV COREBOOT_VERSION=4.19
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -9,6 +12,7 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 		build-essential \
 		clang \
 		cmake \
+		curl \
 		devscripts \
 		equivs \
 		genisoimage \
@@ -17,11 +21,12 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 		libxml2-dev \
 		libxmlb-dev \
 		python3-pip \
-		radare2 \
+		wget \
 		zlib1g-dev && \
-	git clone https://salsa.debian.org/reproducible-builds/diffoscope.git /srv/diffoscope && \
-	mk-build-deps --install --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' /srv/diffoscope/debian/control && \
-	rm -rf /srv/diffoscope/debian && \
+	git clone https://github.com/radareorg/radare2.git /opt/radare2 && /opt/radare2/sys/install.sh && \
+	curl -sSL https://salsa.debian.org/reproducible-builds/diffoscope/-/archive/${DIFFOSCOPE_VERSION}/diffoscope-${DIFFOSCOPE_VERSION}.tar.gz | tar xzC /opt && ln -sv /opt/diffoscope-${DIFFOSCOPE_VERSION} /opt/diffoscope && \
+	mk-build-deps --install --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' /opt/diffoscope/debian/control && \
+	rm -rf /opt/diffoscope/debian && \
 	ln -s /usr/lib/x86_64-linux-gnu/xb-tool /usr/local/bin/xb-tool && \
 	pip3 --no-cache-dir install defusedxml r2pipe && \
 	git clone https://github.com/tpoechtrager/apple-libtapi.git /tmp/apple-libtapi && cd /tmp/apple-libtapi && ./build.sh && ./install.sh && cd / && rm -rf /tmp/apple-libtapi && \
@@ -35,15 +40,17 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 		rm /usr/local/bin/size && \
 		rm /usr/local/bin/strings && \
 		rm /usr/local/bin/strip && \
-#	curl -sSL https://github.com/coreboot/coreboot/archive/refs/tags/4.16.tar.gz | tar xzC /tmp && cd /tmp/coreboot-4.16/util && make -C cbfstool -j $(nproc) && make install -C cbfstool && cd / && rm -rf /tmp/coreboot-4.16 && \
+	curl -sSL https://coreboot.org/releases/coreboot-${COREBOOT_VERSION}.tar.xz | tar xJC /tmp && cd /tmp/coreboot-${COREBOOT_VERSION}/util && make -C cbfstool -j $(nproc) && make install -C cbfstool && cd / && rm -rf /tmp/coreboot-${COREBOOT_VERSION} && \
 	apt-get remove --purge --yes \
 		build-essential \
 		clang \
 		cmake \
+		curl \
 		devscripts \
 		equivs \
 		git \
-		python3-pip && \
+		python3-pip \
+		wget && \
 	apt-get clean && \
 	rm -rf /var/lib/apt/lists/*
 
@@ -51,6 +58,6 @@ RUN useradd -ms /bin/bash user
 USER user
 WORKDIR /home/user
 
-ENV PATH="/srv/diffoscope/bin:${PATH}"
+ENV PATH="/opt/diffoscope/bin:${PATH}"
 
-ENTRYPOINT ["/srv/diffoscope/bin/diffoscope"]
+ENTRYPOINT ["/opt/diffoscope/bin/diffoscope"]
