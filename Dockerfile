@@ -20,6 +20,7 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 		libssl-dev \
 		libxml2-dev \
 		libxmlb-dev \
+		ninja-build \
 		python3-pip \
 		wget \
 		zlib1g-dev && \
@@ -28,9 +29,10 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 	mk-build-deps --install --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends --yes' /opt/diffoscope/debian/control && \
 	rm -rf /opt/diffoscope/debian && \
 	ln -s /usr/lib/x86_64-linux-gnu/xb-tool /usr/local/bin/xb-tool && \
-	pip3 --no-cache-dir install defusedxml r2pipe && \
+	pip3 --no-cache-dir install --break-system-packages defusedxml r2pipe && \
 	git clone https://github.com/tpoechtrager/apple-libtapi.git /tmp/apple-libtapi && cd /tmp/apple-libtapi && ./build.sh && ./install.sh && cd / && rm -rf /tmp/apple-libtapi && \
 	git clone https://github.com/tpoechtrager/xar.git /tmp/xar && cd /tmp/xar/xar && ./configure && make -j $(nproc) && make install && cd / && rm -rf /tmp/xar && \
+	git clone https://github.com/tpoechtrager/apple-libdispatch.git /tmp/libdispatch && cd /tmp/libdispatch && cmake -G Ninja -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ . && ninja && ninja install && cd / && rm -rf /tmp/libdispatch && \
 	git clone https://github.com/tpoechtrager/cctools-port.git /tmp/cctools-port && cd /tmp/cctools-port/cctools && ./configure && make -j $(nproc) && make install && cd / && rm -rf /tmp/cctools-port && \
 		rm /usr/local/bin/ar && \
 		rm /usr/local/bin/as && \
@@ -49,6 +51,7 @@ RUN apt-get update && apt-get dist-upgrade --yes && \
 		devscripts \
 		equivs \
 		git \
+		ninja-build \
 		python3-pip \
 		wget && \
 	apt-get clean && \
