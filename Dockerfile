@@ -9,6 +9,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get dist-upgrade --yes && \
 	apt-get install --yes --no-install-recommends \
+		apktool \
 		build-essential \
 		clang \
 		cmake \
