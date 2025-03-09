@@ -3,7 +3,7 @@ FROM debian:bookworm-slim
 LABEL maintainer="Thomas Sänger <thomas@gecko.space>"
 
 ENV DIFFOSCOPE_VERSION=289
-ENV COREBOOT_VERSION=24.08
+ENV COREBOOT_VERSION=24.12
 
 ARG DEBIAN_FRONTEND=noninteractive
 
