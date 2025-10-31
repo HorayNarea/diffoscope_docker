@@ -4,7 +4,7 @@ FROM debian:sid-slim
 
 LABEL maintainer="Thomas Sänger <thomas@gecko.space>"
 
-ENV DIFFOSCOPE_VERSION=306
+ENV DIFFOSCOPE_VERSION=307
 ENV COREBOOT_VERSION=25.09
 
 ARG DEBIAN_FRONTEND=noninteractive
