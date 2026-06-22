@@ -1,6 +1,4 @@
-#FROM debian:bookworm-slim
-# we need to use sid (testing) because systemd-ukify is not part of bookworm (stable 12) - check with trixie (stable 13) when that is released
-FROM debian:sid-slim
+FROM debian:trixie-slim
 
 LABEL maintainer="Thomas Sänger <thomas@gecko.space>"
 
