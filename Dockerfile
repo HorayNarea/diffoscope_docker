@@ -2,7 +2,7 @@ FROM debian:trixie-slim
 
 LABEL maintainer="Thomas Sänger <thomas@gecko.space>"
 
-ENV DIFFOSCOPE_VERSION=328
+ENV DIFFOSCOPE_VERSION=329
 ENV COREBOOT_VERSION=26.03
 
 ARG DEBIAN_FRONTEND=noninteractive
